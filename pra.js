@@ -10,7 +10,7 @@ var app = new Vue({
         isFile: false,
         addState: false, //第一個輸入匡狀態按了可編緝
         starState: false, //星星狀態
-        showType: 'all', //在此all是預設值，指全部的頁面會切換showType的狀態，即：全部(all) /進行中(active) /已完成（finished），而class是否會增加active標籤則視visibility的狀態而定。
+        //在此all是預設值，指全部的頁面會切換showType的狀態，即：全部(all) /進行中(active) /已完成（finished），而class是否會增加active標籤則視visibility的狀態而定。
         // 暫存編輯陣列與標題暫存區 ＆＆＆＆用來預存要編輯的物件及該物件的文字：
         clickNum: -1, //預設點擊區位置   
         catchTodo: {},
@@ -50,6 +50,7 @@ var app = new Vue({
                 btndisabled: true
             },
         ],
+        showType: 'all'
 
     },
     methods: {

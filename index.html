@@ -73,7 +73,7 @@
             </div>
             <!-- todolist 清單 -->
             <ul class="js_list">
-                <li class="list" draggable="true" v-for="(todo,index) in filter" :key="todo.id" :class="{ active: todo.editState,starActive:todo.starState }">
+                <li class="list" v-for="(todo,index) in filter" :key="todo.id" :class="{ active: todo.editState,starActive:todo.starState }">
                     <div class="eachTodoContent listContent">
                         <div class="checkArea">
                             <label class="checkBox-cover" :class="{ active: todo.completed }" :for="todo.id">
@@ -179,7 +179,7 @@
         </section>
 
     </div>
-    <script src="vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
     <script src="pra.js"></script>
 
 </body>
