@@ -145,7 +145,7 @@ var app = new Vue({
                 return item.id === todo.id;
             });
             vm.todos.splice(newIndex, 1)
-        }
+        },
         /*因為不同頁籤就是內容不同的陣列，因此其他頁籤的待辦事項索引值
         會跟在原始陣列 todos 不同，透過修正 removeTodo() 的程式碼，
         去比對在不同頁籤中的待辦事項 id 是否相同，如果 id 相同，
@@ -175,9 +175,23 @@ var app = new Vue({
                     return this.todos;
                     break;
             }
+        },
+        remain() {
+            var remain = [];
+            remain = this.todos.filter((item) => {
+                return !item.completed;
+            });
+            return remain.length;
+        },
+        done() {
+            var done = [];
+            done = this.todos.filter((item) => {
+                return item.completed;
+            });
+            return done.length;
         }
     }
-
+    //計算未完成
     // 在 computed 新增方法，目的是計算 todos.completed 為 false 的數量
     // 用 filter() 過濾 todos
     // 取得一個未完成任務組成的陣列

@@ -27,7 +27,7 @@ html {
         border-bottom: .5rem solid transparent; //解決背景跳動問題
         &:hover,
         &:focus,
-        .active {
+        &.active {
             color: $color-white;
             border-bottom: .5rem solid $color-darkBlue;
         }

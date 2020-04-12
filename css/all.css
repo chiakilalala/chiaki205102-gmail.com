@@ -143,8 +143,7 @@ html {
   border-bottom: .5rem solid transparent;
 }
 
-.navBar a:hover, .navBar a:focus,
-.navBar a .active {
+.navBar a:hover, .navBar a:focus, .navBar a.active {
   color: #FFFFFF;
   border-bottom: 0.5rem solid #00408B;
 }

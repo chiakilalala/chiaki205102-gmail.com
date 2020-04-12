@@ -13,9 +13,9 @@
     <div class="wrap" id="app">
         <div class="header">
             <nav class="navBar">
-                <a href="#" class="js_task" :class="{'active':showType='all'}" @click.prevent="showType=='all'">My Tasks</a>
-                <a href="#" class="js_progress" :class="{'active':showType='InProgress'}" @click.prevent="showType=='InProgress'">In Progress</a>
-                <a href="#" class="js_completed" :class="{'active':showType='Completed'}" @click.prevent="showType=='Completed'">Completed</a>
+                <a href="#" :class="{ 'active':showType == 'all'}" @click="showType = 'all'">My Tasks({{todos.length}})</a>
+                <a href="#" :class="{'active':showType == 'InProgress'}" @click="showType = 'InProgress'">In Progress({{remain}})</a>
+                <a href="#" :class="{'active':showType == 'Completed'}" @click="showType = 'Completed'">Completed({{done}})</a>
             </nav>
         </div>
         <section class="todoListContent" id="js_todoList">
@@ -173,8 +173,9 @@
             <!-- <ul class="js_list">
                 <li v-for="todo in todos"> </li>
             </ul> -->
-            <div class="listCount"> 還有<span class="countNum">4</span> 筆任務未完成
+            <div class="listCount"> <span class="countNum">{{ remain}}</span> tasks left
             </div>
+            <!-- 未完成 -->
 
         </section>
 
