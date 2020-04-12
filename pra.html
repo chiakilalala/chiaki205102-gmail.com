@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size: 10px;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/all.css">
+
+    <title>ToDoList</title>
+</head>
+
+<body>
+    <div class="wrap" id="app">
+        <div class="header">
+            <nav class="navBar">
+                <a href="#" class="js_task" :class="{'active':showType='all'}" @click.prevent="showType=='all'">My Tasks</a>
+                <a href="#" class="js_progress" :class="{'active':showType='InProgress'}" @click.prevent="showType=='InProgress'">In Progress</a>
+                <a href="#" class="js_completed" :class="{'active':showType='Completed'}" @click.prevent="showType=='Completed'">Completed</a>
+            </nav>
+        </div>
+        <section class="todoListContent" id="js_todoList">
+            <div class="inputArea" v-if="seen" @click="addTask">
+
+                <label for="add"><i class="fa fa-plus" aria-hidden="true"></i></label>
+                <input type="text" id="add" placeholder="Add Task" class="addData">
+
+
+            </div>
+            <div class="addList" v-if="seen!=true">
+                <div class="eachTodoContent">
+                    <div class="checkArea">
+                        <!-- <input type="checkbox" id="newAdd">
+                                        <label for="newAdd"><i class="fa fa-square" aria-hidden="true"></i></label> -->
+                        <input type="autofocus" id="detailInput" class="type text-main" placeholder="Type Something Here…" v-model="newTodo">
+                    </div>
+                    <div class="iconArea">
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-pencil onWork" aria-hidden="true" @click="seen =true"></i>
+                    </div>
+                </div>
+                <div class="addContent">
+                    <div class="tittle">
+                        <i class="fa fa-calendar" aria-hidden="true"></i> Deadline
+                    </div>
+                    <!-- time -->
+                    <div class="dateTime">
+                        <input type="date" name="date" autocomplete="off" class="date" v-model="startDate">
+                        <input type="time" name="time" class="time" v-model="startTime">
+                    </div>
+                    <div class="tittle">
+                        <i class="fa fa-file-o" aria-hidden="true"></i> File
+                    </div>
+                    <div class="fileArea">
+                        <p class="fileName"></p>
+                        <input type="file" name="file" id="inputFile" multiple="multiple">
+                        <label for="inputFile"><i class="fa fa-plus-square" aria-hidden="true"></i></label>
+                    </div>
+                    <div class="tittle">
+                        <i class="fa fa-commenting-o" aria-hidden="true"></i> Comment
+                    </div>
+                    <textarea class="note" placeholder="Type your memo here…" v-model="comment"></textarea>
+                </div>
+                <div class="btnGroup">
+                    <button class="btn btn-cancel" @click="cancelBtn" :class="addState ? 'active' : ''">
+            <i class="fa fa-times" aria-hidden="true"></i>
+            Cancel
+        </button>
+                    <button class="btn btn-add" @click="addTodo">
+            <i class="fa fa-plus" aria-hidden="true" ></i>
+            Add Task
+        </button>
+                </div>
+            </div>
+            <!-- todolist 清單 -->
+            <ul class="js_list">
+                <li class="list" draggable="true" v-for="(todo,index) in filter" :key="todo.id" :class="{ active: todo.editState,starActive:todo.starState }">
+                    <div class="eachTodoContent listContent">
+                        <div class="checkArea">
+                            <label class="checkBox-cover" :class="{ active: todo.completed }" :for="todo.id">
+                                <i class="fa fa-check" :class="{ active: todo.completed }" ></i>
+                                <input type="checkbox" v-model="todo.completed" :id="todo.id">
+                            </label>
+                            <!-- <input type="checkbox" class="newAdd"> -->
+                            <!-- <label><i class="fa squareI fa-square" aria-hidden="true"></i></label> -->
+                            <div class="listName" v-if="!todo.editState" :class="{ completed: todo.completed }">
+                                {{todo.title}}</div>
+                            <!-- 標題-inpu -->
+                            <!-- 新增輸入欄 -->
+                            <input type="autofocus" class="type text-main" v-if="todo.editState" placeholder="Type Something Here…" :class="{ completed: todo.completed }" v-model="todo.title">
+                        </div>
+                        <div class="iconArea">
+                            <!-- star icon -->
+                            <i class="fa star  fa-star-o" aria-hidden="true" @click="starActive(index)" :class="todo.starState ? 'active':''"></i>
+                            <!-- 編輯icon -->
+                            <i class="fa fa-pencil" aria-hidden="true" @click="editCheck(todo,index)" :class="todo.editState ? 'active':''"></i>
+                            <!-- 刪除icon -->
+                            <i class="fa fa-trash delete" aria-hidden="true" @click="removeTodo(todo)"></i>
+                        </div>
+                    </div>
+                    <div class="eachTodoSubContent">
+                        <div class="eachStatus">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <span class="deadlineText">{{todo.startDate}}</span>
+                            <span class="deadlineText">{{todo.startTime}}</span>
+                        </div>
+                        <div class="eachStatus" v-if="todo.isFile">
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                        </div>
+                        <div class="eachStatus" v-if="!todo.comment==''">
+                            <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                        </div>
+
+
+                    </div>
+                    <!-- 編輯區塊 -->
+                    <!-- <div class="addList" v-if="todo.editState" :class="{starActive:todo.starState}">
+                        <div class="eachTodoContent">
+                            <div class="checkArea"> -->
+                    <!-- 勾選icon -->
+
+                    <!-- <label class="checkBox-cover" :class="{ active: todo.completed }">
+                                    <i class="fa fa-check" :class="{ active: todo.completed }"></i>
+                                    <input type="checkbox" v-model="todo.completed" :id="todo.id">
+                                </label> -->
+                    <!-- 標題-inpu -->
+                    <!-- <input type="autofocus" class="type text-main" placeholder="Type Something Here…" :class="{ completed: todo.completed }" :value="todo.title">
+                            </div> -->
+
+                    <!-- <div class="iconArea"> -->
+                    <!-- 星星icon -->
+                    <!-- <i class="fa fa-star-o" aria-hidden="true"></i>
+                                <i class="fa fa-pencil onWork" aria-hidden="true" @click="todo.editState = !todo.editState"></i> -->
+                    <!-- </div>
+                        </div> -->
+                    <div class="addContent">
+                        <div class="tittle">
+                            <i class="fa fa-calendar" aria-hidden="true"></i> Deadline
+                        </div>
+                        <!-- time -->
+                        <div class="dateTime">
+                            <input type="date" name="date" autocomplete="off" class="date" v-model="todo.startDate">
+                            <input type="time" name="time" class="time" v-model="todo.startTime">
+                        </div>
+                        <div class="tittle">
+                            <i class="fa fa-file-o" aria-hidden="true"></i> File
+                        </div>
+                        <div class="fileArea">
+                            <p class="fileName"></p>
+                            <input type="file" name="file" multiple="multiple">
+                            <label for="inputFile"><i class="fa fa-plus-square" aria-hidden="true"></i></label>
+                        </div>
+                        <div class="tittle">
+                            <i class="fa fa-commenting-o" aria-hidden="true"></i> Comment
+                        </div>
+                        <textarea class="note" placeholder="Type your memo here…" v-model="todo.comment"></textarea>
+                    </div>
+                    <div class="btnGroup">
+                        <!-- 取消按鈕 -->
+                        <button class="btn btn-cancel" @click="cancelEdit(todo, index)" :class="addState ? 'active' : ''">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                Cancel
+
+                            </button>
+                        <!-- 儲存按鈕 -->
+                        <button class="btn btn-add" @click="saveData(index)" :class="todo.btndisabled ? 'active' : ''">
+                                <i class="fa fa-plus" aria-hidden="true" ></i>
+                                Add Task
+                            </button>
+                    </div>
+
+                </li>
+            </ul>
+            <!-- <ul class="js_list">
+                <li v-for="todo in todos"> </li>
+            </ul> -->
+            <div class="listCount"> 還有<span class="countNum">4</span> 筆任務未完成
+            </div>
+
+        </section>
+
+    </div>
+    <script src="vue.js"></script>
+    <script src="pra.js"></script>
+
+</body>
+
+</html>
